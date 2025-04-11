@@ -1,0 +1,12 @@
+node_modules/
+.claude
+*.log
+config/*.json
+!config/default.json
+.env
+CLAUDE.md
+logs/
+.DS_Store
+backups/
+*.tmp
+coverage/

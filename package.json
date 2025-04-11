@@ -1,0 +1,22 @@
+{
+  "name": "autobackup",
+  "version": "0.1.0",
+  "description": "Automatic backup tool for multiple cloud storage services",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": ["backup", "cloud", "automation", "storage"],
+  "author": "BrendaJack",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-cron": "^3.0.2",
+    "dotenv": "^16.0.3",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

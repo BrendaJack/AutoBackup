@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "AutoBackup",
+    "version": "0.1.0",
+    "port": 3000
+  },
+  "backup": {
+    "interval": "0 2 * * *",
+    "maxRetries": 3,
+    "timeout": 300000
+  },
+  "storage": {
+    "providers": ["local", "gdrive", "dropbox"],
+    "defaultProvider": "local"
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/app.log"
+  }
+}
