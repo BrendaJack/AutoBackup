@@ -1,33 +1,35 @@
 const config = require('./config');
+const logger = require('./logger');
 
 class AutoBackup {
     constructor() {
         this.config = config;
+        this.logger = logger;
         this.isRunning = false;
     }
 
     async start() {
-        console.log(`Starting ${this.config.get('app.name')} v${this.config.get('app.version')}`);
+        this.logger.info(`Starting ${this.config.get('app.name')} v${this.config.get('app.version')}`);
         
         try {
             this.isRunning = true;
             await this.initialize();
-            console.log('AutoBackup service started successfully');
+            this.logger.info('AutoBackup service started successfully');
         } catch (error) {
-            console.error('Failed to start AutoBackup:', error.message);
+            this.logger.error('Failed to start AutoBackup:', error);
             process.exit(1);
         }
     }
 
     async initialize() {
-        console.log('Initializing backup service...');
-        console.log(`Backup interval: ${this.config.get('backup.interval')}`);
-        console.log(`Storage providers: ${this.config.get('storage.providers').join(', ')}`);
-        console.log(`Default provider: ${this.config.get('storage.defaultProvider')}`);
+        this.logger.info('Initializing backup service...');
+        this.logger.info(`Backup interval: ${this.config.get('backup.interval')}`);
+        this.logger.info(`Storage providers: ${this.config.get('storage.providers').join(', ')}`);
+        this.logger.info(`Default provider: ${this.config.get('storage.defaultProvider')}`);
     }
 
     async stop() {
-        console.log('Stopping AutoBackup service...');
+        this.logger.info('Stopping AutoBackup service...');
         this.isRunning = false;
     }
 }
