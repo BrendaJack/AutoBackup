@@ -32,10 +32,16 @@ class ConfigManager {
     loadEnvConfig() {
         return {
             app: {
-                port: process.env.PORT || this.config?.app?.port || 3000
+                port: parseInt(process.env.PORT) || this.config?.app?.port || 3000
             },
             backup: {
-                interval: process.env.BACKUP_INTERVAL || this.config?.backup?.interval
+                interval: process.env.BACKUP_INTERVAL || this.config?.backup?.interval,
+                maxRetries: parseInt(process.env.MAX_RETRIES) || this.config?.backup?.maxRetries,
+                retentionDays: parseInt(process.env.BACKUP_RETENTION_DAYS) || this.config?.backup?.retentionDays
+            },
+            logging: {
+                level: process.env.LOG_LEVEL || this.config?.logging?.level,
+                file: process.env.LOG_FILE || this.config?.logging?.file
             }
         };
     }

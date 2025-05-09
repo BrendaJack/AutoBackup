@@ -58,27 +58,45 @@ class BackupManager {
         let successful = 0;
         let totalSize = 0;
         const errors = [];
+        const maxRetries = this.config.get('backup.maxRetries') || 3;
 
         for (const file of files) {
-            try {
-                const relativePath = path.relative(sourcePath, file.path);
-                const targetPath = path.join(backupPath, relativePath);
-                
-                await fs.mkdir(path.dirname(targetPath), { recursive: true });
-                await fs.copyFile(file.path, targetPath);
-                
-                successful++;
-                totalSize += file.size;
-            } catch (error) {
-                errors.push({
-                    file: file.path,
-                    error: error.message
-                });
-                this.logger.warn(`Failed to copy ${file.path}:`, error.message);
+            let retryCount = 0;
+            let copied = false;
+            
+            while (retryCount < maxRetries && !copied) {
+                try {
+                    const relativePath = path.relative(sourcePath, file.path);
+                    const targetPath = path.join(backupPath, relativePath);
+                    
+                    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+                    await fs.copyFile(file.path, targetPath);
+                    
+                    successful++;
+                    totalSize += file.size;
+                    copied = true;
+                } catch (error) {
+                    retryCount++;
+                    if (retryCount >= maxRetries) {
+                        errors.push({
+                            file: file.path,
+                            error: error.message,
+                            retries: retryCount
+                        });
+                        this.logger.warn(`Failed to copy ${file.path} after ${retryCount} attempts:`, error.message);
+                    } else {
+                        this.logger.debug(`Retry ${retryCount} for ${file.path}`);
+                        await this._sleep(1000 * retryCount); // exponential backoff
+                    }
+                }
             }
         }
 
         return { successful, totalSize, errors };
+    }
+
+    _sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     _generateBackupId() {
