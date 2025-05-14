@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "mocha test/*.test.js"
   },
   "keywords": ["backup", "cloud", "automation", "storage"],
   "author": "BrendaJack",
@@ -17,6 +18,8 @@
     "winston": "^3.8.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7"
   }
 }
